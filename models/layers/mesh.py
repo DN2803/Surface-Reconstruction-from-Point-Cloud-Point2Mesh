@@ -88,11 +88,53 @@ class Mesh:
             self.nvs.append(len(e))
             self.nvsi.append(len(e) * [i])
             self.nvsin.append(list(range(len(e))))
-        self.vei = torch.from_numpy(np.concatenate(np.array(self.vei)).ravel()).to(self.device).long()
-        self.nvsi = torch.Tensor(np.concatenate(np.array(self.nvsi)).ravel()).to(self.device).long()
-        self.nvsin = torch.from_numpy(np.concatenate(np.array(self.nvsin)).ravel()).to(self.device).long()
+        #self.vei = torch.from_numpy(np.concatenate(np.array(self.vei)).ravel()).to(self.device).long()
+        
+        # Flatten `vei` sau khi kiểm tra và đảm bảo các phần tử có cùng độ dài
+        vei_flattened = []
+        for entry in self.vei:
+          if isinstance(entry, (list, np.ndarray)):
+            vei_flattened.extend(entry)
+          else:
+            vei_flattened.append(entry)
+
+        self.vei = torch.tensor(vei_flattened, dtype=torch.long, device=self.device)
+
+        
+        
+        #self.nvsi = torch.Tensor(np.concatenate(np.array(self.nvsi)).ravel()).to(self.device).long()
+        nvsi_flattened = []
+        for entry in self.nvsi:
+          if isinstance(entry, (list, np.ndarray)):
+            nvsi_flattened.extend(entry)
+          else:
+            nvsi_flattened.append(entry)
+        self.nvsi = torch.tensor(nvsi_flattened, dtype=torch.long, device=self.device)
+
+        
+        
+        #self.nvsin = torch.from_numpy(np.concatenate(np.array(self.nvsin)).ravel()).to(self.device).long()
+        nvsin_flattened = []
+        for entry in self.nvsin:
+          if isinstance(entry, (list, np.ndarray)):
+            nvsin_flattened.extend(entry)
+          else:
+            nvsin_flattened.append(entry)
+        self.nvsin = torch.tensor(nvsin_flattened, dtype=torch.long, device=self.device)
+
+        
         ve_in = copy.deepcopy(self.ve)
-        self.ve_in = torch.from_numpy(np.concatenate(np.array(ve_in)).ravel()).to(self.device).long()
+        #self.ve_in = torch.from_numpy(np.concatenate(np.array(ve_in)).ravel()).to(self.device).long()
+        ve_in_flattened = []
+        for entry in ve_in:
+          if isinstance(entry, (list, np.ndarray)):
+            ve_in_flattened.extend(entry)
+          else:
+            ve_in_flattened.append(entry)
+        self.ve_in = torch.tensor(ve_in_flattened, dtype=torch.long, device=self.device)
+
+        
+        
         self.max_nvs = max(self.nvs)
         self.nvs = torch.Tensor(self.nvs).to(self.device).float()
         self.edge2key = edge2key
@@ -364,7 +406,11 @@ class PartMesh:
         for i in range(self.n_submeshes):
             mask = torch.zeros(self.main_mesh.edges.shape[0]).long()
             for face in self.sub_mesh[i].faces:
-                face = self.sub_mesh_index[i][face].to(face.device).long()
+                
+                face = face.to(self.sub_mesh_index[i].device)
+                face = self.sub_mesh_index[i][face].long()
+
+                #face = self.sub_mesh_index[i][face].to(face.device).long()
                 for j in range(3):
                     e = tuple(sorted([face[j].item(), face[(j + 1) % 3].item()]))
                     mask[vse[e]] = 1
@@ -426,7 +472,10 @@ class PartMesh:
         """
         vs_mask = torch.zeros(mesh.vs.shape[0])
         vs_mask[vs_index] = 1
-        faces_mask = vs_mask[mesh.faces].sum(dim=-1) > 0
+        #faces_mask = vs_mask[mesh.faces].sum(dim=-1) > 0
+        faces_mask = vs_mask[mesh.faces.to(vs_mask.device)].sum(dim=-1) > 0
+
+        
         new_faces = mesh.faces[faces_mask].clone()
         all_verts = new_faces.view(-1)
         new_vs_mask = torch.zeros(mesh.vs.shape[0]).long().to(all_verts.device)
@@ -436,7 +485,11 @@ class PartMesh:
         vs_mask = torch.zeros(mesh.vs.shape[0])
         vs_mask[new_vs_index] = 1
         cummusum = torch.cumsum(1 - vs_mask, dim=0)
-        new_faces -= cummusum[new_faces].to(new_faces.device).long()
+        #new_faces -= cummusum[new_faces].to(new_faces.device).long()
+        new_faces = new_faces.to(cummusum.device)
+        new_faces -= cummusum[new_faces].long()
+
+        
         m = Mesh.from_tensor(mesh, new_vs.detach(), new_faces.detach(), gfmm=False)
         return m, new_vs_index
 
