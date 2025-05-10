@@ -46,7 +46,7 @@ def xyz_to_ply(xyz_pointcloud, output_ply_file):
 
     
 
-ply_input_file = "output.ply"
+ply_input_file = "input.ply"
 ply_output_file = "output.ply"
 
 xyz_pointcloud = load_ply_as_xyz(ply_input_file)
