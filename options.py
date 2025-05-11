@@ -15,7 +15,7 @@ class Options:
         parser = argparse.ArgumentParser(description='Point2Mesh options')
         parser.add_argument('--save-path', type=str, default='./checkpoints/result', help='path to save results to')
         parser.add_argument('--input-pc', type=str, default='./data/pointcloud.ply', help='input point cloud')
-        parser.add_argument('--initial-mesh', type=str, default='./data/initmesh.obj', help='initial mesh')
+        parser.add_argument('--initial-mesh', type=str, default='./data/pointcloud_hull.obj', help='initial mesh')
         # HYPER PARAMETERS - RECONSTRUCTION
         parser.add_argument('--torch-seed', type=int, metavar='N', default=5, help='torch random seed')
         parser.add_argument('--samples', type=int, metavar='N', default=25000,
