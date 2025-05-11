@@ -13,15 +13,15 @@ class Options:
 
     def parse_args(self):
         parser = argparse.ArgumentParser(description='Point2Mesh options')
-        parser.add_argument('--save-path', type=str, default='./checkpoints/guitar', help='path to save results to')
-        parser.add_argument('--input-pc', type=str, default='./data/guitar.ply', help='input point cloud')
-        parser.add_argument('--initial-mesh', type=str, default='./data/guitar_initmesh.obj', help='initial mesh')
+        parser.add_argument('--save-path', type=str, default='./checkpoints/result', help='path to save results to')
+        parser.add_argument('--input-pc', type=str, default='./data/pointcloud.ply', help='input point cloud')
+        parser.add_argument('--initial-mesh', type=str, default='./data/initmesh.obj', help='initial mesh')
         # HYPER PARAMETERS - RECONSTRUCTION
         parser.add_argument('--torch-seed', type=int, metavar='N', default=5, help='torch random seed')
         parser.add_argument('--samples', type=int, metavar='N', default=25000,
                             help='number of points to sample reconstruction with')
         parser.add_argument('--begin-samples', type=int, metavar='N', default=15000, help='num pts to start with')
-        parser.add_argument('--iterations', type=int, metavar='N', default=10000, help='number of iterations to do')
+        parser.add_argument('--iterations', type=int, metavar='N', default=5000, help='number of iterations to do')
         parser.add_argument('--upsamp', type=int, metavar='N', default=1000, help='upsample each {upsamp} iteration')
         parser.add_argument('--max-faces', type=int, metavar='N', default=10000,
                             help='maximum number of faces to upsample to')
