@@ -112,5 +112,5 @@ def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000,
     with torch.no_grad():
         mesh.export(os.path.join(opts.save_path, 'last_recon.obj'))
 
-if __name__ == '__main__':
-    run_mesh()
+# if __name__ == '__main__':
+#     run_mesh()
