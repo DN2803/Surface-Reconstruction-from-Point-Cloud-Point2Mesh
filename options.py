@@ -2,16 +2,17 @@ import argparse
 import os
 import numpy as np
 import torch
+import sys
 
 MANIFOLD_DIR = r'~/code/Manifold/build'  # path to manifold software (https://github.com/hjwdzh/Manifold)
 
 
 class Options:
-    def __init__(self):
+    def __init__(self, args_list=None):
         self.args = None
-        self.parse_args()
+        self.parse_args(args_list)
 
-    def parse_args(self):
+    def parse_args(self, args_list=None):
         parser = argparse.ArgumentParser(description='Point2Mesh options')
         parser.add_argument('--save-path', type=str, default='./checkpoints/result', help='path to save results to')
         parser.add_argument('--input-pc', type=str, default='./data/pointcloud.ply', help='input point cloud')
@@ -56,6 +57,9 @@ class Options:
                                                                           ' iter % (--beamgap-modulo) == 0')
         parser.add_argument('--manifold-always', action='store_true',
                             help='always run manifold even when the maximum number of faces is reached')
+
+        if args_list is None:
+            args_list = [arg for arg in sys.argv[1:] if not arg.startswith("-f=") and not arg.endswith(".json")]
 
         self.args = parser.parse_args()
 

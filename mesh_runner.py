@@ -10,9 +10,9 @@ import os
 from pathlib import Path
 from scripts.process_data.convex_hull import convex_hull_generate
 
-def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000, manifold_res=8000):
+def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000, manifold_res=8000, args_list=None):
     print("meshing...")
-    options = Options()
+    options = Options(args_list=args_list)
     opts = options.args
 
     if input_pcl:
