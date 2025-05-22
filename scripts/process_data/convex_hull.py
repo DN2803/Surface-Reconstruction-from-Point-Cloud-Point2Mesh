@@ -76,6 +76,31 @@ def blender_rehull(target: Path, dest: Path, res: int, blender_path: Path):
     os.system(cmd)
 
 
+def convex_hull_generate(input_path: Path, output_path: Path, manifold_path: Path, faces=5000, manifold_res=8000,
+             use_blender=False, blender_path=None, blender_res=5):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--i', type=Path)
+    parser.add_argument('--faces', type=int)
+    parser.add_argument('--o', type=str, default='')
+    parser.add_argument('--manifold-path', type=Path, default=None)
+    parser.add_argument('--manifold-res', type=int, default=5000)
+    parser.add_argument('--blender', action='store_true')
+    parser.add_argument('--blender-res', type=int, default=5)
+    parser.add_argument('--blender-path', type=Path, default=None)
+
+    args = parser.parse_args([])  # empty list to avoid parsing sys.argv
+    args.i = input_path
+    args.o = output_path
+    args.faces = faces
+    args.manifold_path = manifold_path
+    args.manifold_res = manifold_res
+    args.blender = use_blender
+    args.blender_path = blender_path
+    args.blender_res = blender_res
+
+    check_args(args)
+    run(args)
+
 if __name__ == '__main__':
     base_path = os.path.dirname(os.path.abspath(__file__))
     parser = argparse.ArgumentParser(description='Convex hull maker')
