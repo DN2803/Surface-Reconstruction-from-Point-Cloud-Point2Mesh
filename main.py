@@ -1,7 +1,7 @@
 import torch
 from models.layers.mesh import Mesh, PartMesh
 from models.networks import init_net, sample_surface, local_nonuniform_penalty
-import utils
+import p2m_utils
 import numpy as np
 from models.losses import chamfer_distance, BeamGapLoss
 from options import Options
@@ -35,7 +35,7 @@ def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000,
     mesh = Mesh(opts.initial_mesh, device=device, hold_history=True)
 
     # input point cloud
-    input_xyz, input_normals = utils.read_pts(opts.input_pc)
+    input_xyz, input_normals = p2m_utils.read_pts(opts.input_pc)
     # normalize point cloud based on initial mesh
     input_xyz /= mesh.scale
     input_xyz += mesh.translations[None, :]
@@ -98,7 +98,7 @@ def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000,
 
             if num_faces > len(mesh.faces) or opts.manifold_always:
                 # up-sample mesh
-                mesh = utils.manifold_upsample(mesh, opts.save_path, Mesh,
+                mesh = p2m_utils.manifold_upsample(mesh, opts.save_path, Mesh,
                                             num_faces=min(num_faces, opts.max_faces),
                                             res=opts.manifold_res, simplify=True)
 

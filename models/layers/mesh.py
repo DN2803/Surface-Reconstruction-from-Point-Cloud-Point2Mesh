@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from queue import Queue
-from utils import load_obj, export
+from p2m_utils import load_obj, export
 import copy
 from pathlib import Path
 import pickle

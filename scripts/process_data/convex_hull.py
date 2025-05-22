@@ -2,7 +2,7 @@ import trimesh
 from models.layers.mesh import *
 import argparse
 import pathlib
-from utils import *
+from p2m_utils import *
 import warnings
 
 
