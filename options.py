@@ -10,7 +10,8 @@ MANIFOLD_DIR = r'~/code/Manifold/build'  # path to manifold software (https://gi
 class Options:
     def __init__(self, args_list=None):
         self.args = None
-        self.parse_args(args_list)
+        if args_list is not None:
+            self.parse_args(args_list)
 
     def parse_args(self, args_list=None):
         parser = argparse.ArgumentParser(description='Point2Mesh options')
