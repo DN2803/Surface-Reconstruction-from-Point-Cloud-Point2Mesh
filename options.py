@@ -61,7 +61,7 @@ class Options:
         if args_list is None:
             args_list = [arg for arg in sys.argv[1:] if not arg.startswith("-f=") and not arg.endswith(".json")]
 
-        self.args = parser.parse_args()
+        self.args = parser.parse_args(args_list)
 
         if not os.path.exists(self.args.save_path):
             os.makedirs(self.args.save_path)
