@@ -60,7 +60,11 @@ class Options:
                             help='always run manifold even when the maximum number of faces is reached')
 
         if args_list is None:
-            args_list = [arg for arg in sys.argv[1:] if not arg.startswith("-f=") and not arg.endswith(".json")]
+            import sys
+            if 'ipykernel' in sys.modules:
+                args_list = []
+            else:
+                args_list = [arg for arg in sys.argv[1:] if not arg.startswith("-f=") and not arg.endswith(".json")]
        
         self.args = parser.parse_args(args_list)
 
