@@ -8,11 +8,11 @@ MANIFOLD_DIR = r'~/code/Manifold/build'  # path to manifold software (https://gi
 
 
 class Options:
-    def __init__(self):
+    def __init__(self, args_list=None):
         self.args = None
-        self.parser = self.create_parser()
+        self.parse_args(args_list)
 
-    def create_parser(self):
+    def parse_args(self, args_list=None):
         parser = argparse.ArgumentParser(description='Point2Mesh options')
         parser.add_argument('--save-path', type=str, default='./checkpoints/result', help='path to save results to')
         parser.add_argument('--input-pc', type=str, default='./data/pointcloud.ply', help='input point cloud')
@@ -57,45 +57,11 @@ class Options:
                                                                           ' iter % (--beamgap-modulo) == 0')
         parser.add_argument('--manifold-always', action='store_true',
                             help='always run manifold even when the maximum number of faces is reached')
-        return parser
 
-    def parse(self, args=None):
-        """
-        Parse arguments.
-
-        args can be:
-         - None: parse from sys.argv (excluding Jupyter args)
-         - list of strings: like command line args
-         - dict: keys are argument names (without --), values are argument values
-
-        After parsing, will create save_path folder and write opt.txt
-        """
-        if args is None:
-            # exclude -f=... and .json args that can come from Jupyter
+        if args_list is None:
             args_list = [arg for arg in sys.argv[1:] if not arg.startswith("-f=") and not arg.endswith(".json")]
-            print("Parsing args from sys.argv:", args_list)
-            self.args = self.parser.parse_args(args_list)
-        elif isinstance(args, list):
-            print("Parsing args from list:", args)
-            self.args = self.parser.parse_args(args)
-        elif isinstance(args, dict):
-            # Convert dict to list of strings
-            args_list = []
-            for k, v in args.items():
-                key = f"--{k.replace('_','-')}"
-                if isinstance(v, bool):
-                    # For flags
-                    if v:
-                        args_list.append(key)
-                elif isinstance(v, list):
-                    args_list.append(key)
-                    args_list.extend(str(x) for x in v)
-                else:
-                    args_list.extend([key, str(v)])
-            print("Parsing args from dict:", args_list)
-            self.args = self.parser.parse_args(args_list)
-        else:
-            raise ValueError("args must be None, list, or dict")
+       
+        self.args = parser.parse_args(args_list)
 
         if not os.path.exists(self.args.save_path):
             os.makedirs(self.args.save_path)
@@ -103,8 +69,6 @@ class Options:
         with open(f'{self.args.save_path}/opt.txt', '+w') as f:
             for k, v in sorted(vars(self.args).items()):
                 f.write('%s: %s\n' % (str(k), str(v)))
-
-        return self.args
 
     def get_num_parts(self, num_faces):
         lookup_num_parts = [1, 2, 4, 8]
