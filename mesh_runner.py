@@ -19,7 +19,7 @@ def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000,
         opts.input_pc = str(input_pcl)
         # generate convex hull
         convex_hull_path = input_pcl.parent / "convex_hull.obj"
-        convex_hull_generate(input_path=input_pcl, output_path=convex_hull_path, manifold_path=manifold_path)
+        convex_hull_generate(input_path=input_pcl, output_path=convex_hull_path, manifold_path=Path(manifold_path))
         opts.initial_mesh = str(convex_hull_path)
 
     if output_path:
