@@ -4,13 +4,13 @@ from models.networks import init_net, sample_surface, local_nonuniform_penalty
 import p2m_utils
 import numpy as np
 from models.losses import chamfer_distance, BeamGapLoss
-from options import Options
+from options import Options, MANIFOLD_DIR
 import time
 import os
 from pathlib import Path
 from scripts.process_data.convex_hull import convex_hull_generate
 
-def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000, manifold_res=8000, args_list=None):
+def run_mesh(input_pcl: Path, output_path: Path, faces=5000, manifold_res=8000, args_list=None):
     print("meshing...")
     options = Options(args_list=args_list)
     opts = options.args
@@ -19,7 +19,7 @@ def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000,
         opts.input_pc = str(input_pcl)
         # generate convex hull
         convex_hull_path = input_pcl.parent / "convex_hull.obj"
-        convex_hull_generate(input_path=input_pcl, output_path=convex_hull_path, manifold_path=Path(manifold_path))
+        convex_hull_generate(input_path=input_pcl, output_path=convex_hull_path, manifold_path=Path(MANIFOLD_DIR))
         opts.initial_mesh = str(convex_hull_path)
 
     if output_path:
