@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+import subprocess
 import os
 import uuid
 from options import MANIFOLD_DIR
@@ -16,13 +17,23 @@ def manifold_upsample(mesh, save_path, Mesh, num_faces=2000, res=3000, simplify=
     manifold_script_path = os.path.join(MANIFOLD_DIR, 'manifold')
     if not os.path.exists(manifold_script_path):
         raise FileNotFoundError(f'{manifold_script_path} not found')
-    cmd = "{} {} {}".format(manifold_script_path, fname, temp_file + opts)
-    os.system(cmd)
+    cmd = [manifold_script_path, fname, temp_file + opts]
+    try:
+        subprocess.run(cmd, check=True)
+        print("✅ manifold chạy thành công")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ manifold thất bại: {e}")
+        # Có thể raise exception hoặc return tại đây tùy bạn xử lý
 
+    # Nếu cần đơn giản hóa (simplify)
     if simplify:
-        cmd = "{} -i {} -o {} -f {}".format(os.path.join(MANIFOLD_DIR, 'simplify'), temp_file,
-                                                             temp_file, num_faces)
-        os.system(cmd)
+        simplify_path = os.path.join(MANIFOLD_DIR, 'simplify')
+        cmd = [simplify_path, '-i', temp_file, '-o', temp_file, '-f', str(num_faces)]
+        try:
+            subprocess.run(cmd, check=True)
+            print("✅ simplify chạy thành công")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ simplify thất bại: {e}")
 
     m_out = Mesh(temp_file, hold_history=True, device=mesh.device)
     fname = os.path.join(save_path, 'recon_{}_after.obj'.format(len(m_out.faces)))
