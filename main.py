@@ -11,22 +11,11 @@ from pathlib import Path
 
 from scripts.process_data.convex_hull import convex_hull_generate
 
-def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000, manifold_res=8000):
+def run_mesh():
     print("meshing...")
     options = Options()
     opts = options.args
-
-    if input_pcl:
-        opts.input_pc = str(input_pcl)
-        ## generate convex hull 
-        convex_hull_path = input_pcl.parent / "convex_hull.obj"
-        convex_hull_generate(input_path=input_pcl, output_path= convex_hull_path, manifold_path=manifold_path)
-        opts.initial_mesh = str(convex_hull_path)
-
-    if output_path:
-        opts.save_path = str(output_path)
-
-
+    print(opts)
     torch.manual_seed(opts.torch_seed)
     device = torch.device('cuda:{}'.format(opts.gpu) if torch.cuda.is_available() else torch.device('cpu'))
     print('device: {}'.format(device))
@@ -112,5 +101,5 @@ def run_mesh(input_pcl: Path, output_path: Path, manifold_path: str, faces=5000,
     with torch.no_grad():
         mesh.export(os.path.join(opts.save_path, 'last_recon.obj'))
 
-# if __name__ == '__main__':
-#     run_mesh()
+if __name__ == '__main__':
+    run_mesh()
