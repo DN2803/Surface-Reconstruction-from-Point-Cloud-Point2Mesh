@@ -21,7 +21,7 @@ def manifold_upsample(mesh, save_path, Mesh, num_faces=2000, res=3000, simplify=
     cmd = [manifold_script_path, fname, temp_file]
     if res is not None:
         cmd.append(str(res))
-
+    print(f"Chạy lệnh: {' '.join(cmd)}")
     try:
         subprocess.run(cmd, check=True)
         print("✅ manifold chạy thành công")
