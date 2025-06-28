@@ -12,7 +12,7 @@ def manifold_upsample(mesh, save_path, Mesh, num_faces=2000, res=3000, simplify=
     mesh.export(fname)
 
     temp_file = os.path.join(save_path, random_file_name('obj'))
-    # opts = ' ' + str(res) if res is not None else ''
+    opts = ' ' + str(res) if res is not None else ''
 
     manifold_script_path = os.path.join(MANIFOLD_DIR, 'manifold')
     if not os.path.exists(manifold_script_path):
@@ -20,7 +20,7 @@ def manifold_upsample(mesh, save_path, Mesh, num_faces=2000, res=3000, simplify=
     # cmd = [manifold_script_path, fname, temp_file + opts]
     cmd = [manifold_script_path, fname, temp_file]
     if res is not None:
-        cmd.append(res)
+        cmd.append(str(opts))
     print(f"Chạy lệnh: {' '.join(cmd)}")
     try:
         subprocess.run(cmd, check=True)
