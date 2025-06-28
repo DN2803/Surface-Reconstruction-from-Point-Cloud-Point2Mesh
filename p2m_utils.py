@@ -19,8 +19,8 @@ def manifold_upsample(mesh, save_path, Mesh, num_faces=2000, res=3000, simplify=
         raise FileNotFoundError(f'{manifold_script_path} not found')
     # cmd = [manifold_script_path, fname, temp_file + opts]
     cmd = [manifold_script_path, fname, temp_file]
-    # if res is not None:
-    #     cmd.append(str(res))
+    if res is not None:
+        cmd.append(res)
     print(f"Chạy lệnh: {' '.join(cmd)}")
     try:
         subprocess.run(cmd, check=True)
