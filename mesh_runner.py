@@ -19,7 +19,7 @@ def run_mesh(input_pcl: Path, output_path: Path, faces=5000, manifold_res=8000, 
         opts.input_pc = str(input_pcl)
         # generate convex hull
         convex_hull_path = input_pcl.parent / "convex_hull.obj"
-        convex_hull_generate(input_path=input_pcl, output_path=convex_hull_path, manifold_path=Path(MANIFOLD_DIR))
+        convex_hull_generate(input_path=input_pcl, output_path=convex_hull_path, manifold_path=Path(MANIFOLD_DIR), manifold_res=manifold_res, faces=faces)
         opts.initial_mesh = str(convex_hull_path)
 
     if output_path:
@@ -111,3 +111,4 @@ def run_mesh(input_pcl: Path, output_path: Path, faces=5000, manifold_res=8000, 
 
     with torch.no_grad():
         mesh.export(os.path.join(opts.save_path, 'last_recon.obj'))
+
