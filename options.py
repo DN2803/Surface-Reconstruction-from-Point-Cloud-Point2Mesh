@@ -4,7 +4,10 @@ import numpy as np
 import torch
 import sys
 
-MANIFOLD_DIR = './Manifold/build'  # path to manifold software (https://github.com/hjwdzh/Manifold)
+from pathlib import Path
+
+MANIFOLD_DIR = Path(__file__).resolve().parent.parent / "Manifold" / "build"
+  # path to manifold software (https://github.com/hjwdzh/Manifold)
 
 
 class Options:

@@ -61,6 +61,7 @@ def count_faces(path: Path) -> int:
 
 def inplace_manifold(path: Path, res: int, manifold_software_path: Path):
     cmd = f'{manifold_software_path}/manifold {path} {path} {res}'
+    print(f"Chạy lệnh: {cmd}")
     os.system(cmd)
 
 
