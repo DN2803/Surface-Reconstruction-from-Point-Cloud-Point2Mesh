@@ -1,9 +1,9 @@
 import torch
-from models.layers.mesh import Mesh, PartMesh
-from models.networks import init_net, sample_surface, local_nonuniform_penalty
+from p2m_models.layers.mesh import Mesh, PartMesh
+from p2m_models.networks import init_net, sample_surface, local_nonuniform_penalty
 import p2m_utils
 import numpy as np
-from models.losses import chamfer_distance, BeamGapLoss
+from p2m_models.losses import chamfer_distance, BeamGapLoss
 from options import Options
 import time
 import os
