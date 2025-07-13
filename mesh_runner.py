@@ -12,11 +12,11 @@ from scripts.process_data.convex_hull import convex_hull_generate
 import stat
 def run_mesh(input_pcl: Path, output_path: Path, faces=5000, manifold_res=8000, args_list=None):
 
-    # Kiểm tra và thiết lập quyền truy cập cho Manifold
-    manifold_path = Path(MANIFOLD_DIR) / 'manifold'
-    if not os.access(manifold_path, os.X_OK):
-        print("Fixing permission for manifold binary...")
-        os.chmod(manifold_path, os.stat(manifold_path).st_mode | stat.S_IEXEC)
+    # # Kiểm tra và thiết lập quyền truy cập cho Manifold
+    # manifold_path = Path(MANIFOLD_DIR) / 'manifold'
+    # if not os.access(MANIFOLD_DIR, os.X_OK):
+    #     print("Fixing permission for manifold binary...")
+    #     os.chmod(manifold_path, os.stat(manifold_path).st_mode | stat.S_IEXEC)
 
     print("meshing...")
     options = Options(args_list=args_list)
@@ -49,7 +49,7 @@ def run_mesh(input_pcl: Path, output_path: Path, faces=5000, manifold_res=8000, 
     part_mesh = PartMesh(mesh, num_parts=options.get_num_parts(len(mesh.faces)), bfs_depth=opts.overlap)
     print(f'number of parts {part_mesh.n_submeshes}')
     net, optimizer, rand_verts, scheduler = init_net(mesh, part_mesh, device, opts)
-
+    rand_verts.requires_grad_(True)
     beamgap_loss = BeamGapLoss(device)
 
     if opts.beamgap_iterations > 0:
