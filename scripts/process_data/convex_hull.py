@@ -1,5 +1,5 @@
 import trimesh
-from models.layers.mesh import *
+from p2m_models.layers.mesh import *
 import argparse
 import pathlib
 from p2m_utils import *
