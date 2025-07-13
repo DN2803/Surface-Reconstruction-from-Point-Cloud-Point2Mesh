@@ -9,8 +9,15 @@ import time
 import os
 from pathlib import Path
 from scripts.process_data.convex_hull import convex_hull_generate
-
+import stat
 def run_mesh(input_pcl: Path, output_path: Path, faces=5000, manifold_res=8000, args_list=None):
+
+    # Kiểm tra và thiết lập quyền truy cập cho Manifold
+    manifold_path = Path(MANIFOLD_DIR) / 'manifold'
+    if not os.access(manifold_path, os.X_OK):
+        print("Fixing permission for manifold binary...")
+        os.chmod(manifold_path, os.stat(manifold_path).st_mode | stat.S_IEXEC)
+
     print("meshing...")
     options = Options(args_list=args_list)
     opts = options.args
